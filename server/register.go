@@ -6,6 +6,7 @@ import (
 	"polar/structures"
 
 	"github.com/mitchellh/mapstructure"
+	"github.com/rs/zerolog/log"
 )
 
 func Register(ctx context.Context, req structures.Request) error {
@@ -16,6 +17,8 @@ func Register(ctx context.Context, req structures.Request) error {
 	}
 
 	node.Add()
+
+	log.Info().Msg("New node discovered: " + node.Address + "/" + node.PublicKey)
 
 	return nil
 }

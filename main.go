@@ -52,7 +52,11 @@ func main() {
 	log.Info().Msg("seeding server: " + *seed)
 	log.Info().Msg("data path: " + *data)
 
-	log.Print(models.Node{}.List())
+	log.Info().Msg("Listing nodes:")
+	nodes := models.Node{}.List()
+	for _, node := range nodes {
+		log.Info().Msg(node.Address + "/" + node.PublicKey)
+	}
 
 	server.Listen(*port)
 }

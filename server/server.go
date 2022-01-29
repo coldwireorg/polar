@@ -22,9 +22,7 @@ func Listen(port string) {
 	}
 
 	bridge := jhttp.NewBridge(f, &jhttp.BridgeOptions{
-		Server: &jrpc2.ServerOptions{
-			Logger: log.Info().Msg,
-		},
+		Server: &jrpc2.ServerOptions{},
 	})
 	defer bridge.Close()
 

@@ -27,11 +27,18 @@ func seedServers(seed string) {
 	}
 
 	for _, node := range n {
-		log.Print("add server: " + node.Address)
-		client.Call("http://"+node.Address, "Register", structures.Request{
-			Content: models.Node{}.List()[0],
-		})
-		node.Add()
+		n := models.Node{
+			PublicKey: node.PublicKey,
+		}.FindWithPbKey()
+
+		if n.PublicKey == "" {
+			log.Info().Msg("New node discovered: " + node.Address + "/" + node.PublicKey)
+
+			client.Call("http://"+node.Address, "Register", structures.Request{
+				Content: models.Node{}.List()[0],
+			})
+			node.Add()
+		}
 	}
 }
 

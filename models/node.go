@@ -1,8 +1,11 @@
 package models
 
 import (
+	"errors"
 	"polar/database"
 
+	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
@@ -22,13 +25,29 @@ func (n Node) Del() {
 	database.DB.Delete(&n)
 }
 
+func (n Node) FindWithPbKey() Node {
+	var node Node
+	err := database.DB.Raw("SELECT * FROM nodes WHERE public_key = ? LIMIT 1", n.PublicKey).Scan(&node).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return Node{}
+		} else {
+			log.Err(err)
+		}
+	}
+
+	return node
+}
+
 func (n Node) List() []Node {
 	var nodes []Node
-	database.DB.Find(&Node{}).Scan(&nodes)
+	database.DB.Find(&nodes)
 	return nodes
 }
 
-func (n Node) Number() int64 {
-	nodes := database.DB.Find(&Node{})
-	return nodes.RowsAffected
+func (n Node) Number() int {
+	var node []Node
+	database.DB.Find(&node)
+	return len(node)
 }
