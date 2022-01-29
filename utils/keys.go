@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/ed25519"
 	"crypto/rand"
+	"encoding/base64"
 	"os"
 
 	"github.com/rs/zerolog/log"
@@ -16,32 +17,34 @@ func ChecKeys(path string) {
 			log.Fatal().Err(err)
 		}
 
-		err = os.WriteFile(path+"/pbkey", pbkey, 0664)
+		b64pbkey := base64.StdEncoding.EncodeToString(pbkey)
+		err = os.WriteFile(path+"/pbkey", []byte(b64pbkey), 0664)
 		if err != nil {
 			log.Fatal().Err(err)
 		}
 
-		err = os.WriteFile(path+"/pvkey", pvkey, 0664)
+		b64pvkey := base64.StdEncoding.EncodeToString(pvkey)
+		err = os.WriteFile(path+"/pvkey", []byte(b64pvkey), 0664)
 		if err != nil {
 			log.Fatal().Err(err)
 		}
 	}
 }
 
-func GetPbKey(path string) ed25519.PublicKey {
+func GetPbKey(path string) string {
 	pbk, err := os.ReadFile(path + "/pbkey")
 	if err != nil {
 		log.Fatal().Err(err)
 	}
 
-	return pbk
+	return string(pbk)
 }
 
-func GetPvKey(path string) ed25519.PrivateKey {
+func GetPvKey(path string) string {
 	pvk, err := os.ReadFile(path + "/pvkey")
 	if err != nil {
 		log.Fatal().Err(err)
 	}
 
-	return pvk
+	return string(pvk)
 }

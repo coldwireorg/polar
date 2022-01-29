@@ -6,6 +6,7 @@ import (
 
 	"github.com/creachadair/jrpc2"
 	"github.com/creachadair/jrpc2/jhttp"
+	"github.com/rs/zerolog/log"
 )
 
 func Call(endpoint string, method string, req structures.Request) interface{} {
@@ -13,7 +14,10 @@ func Call(endpoint string, method string, req structures.Request) interface{} {
 	client := jrpc2.NewClient(ch, nil)
 
 	var res interface{}
-	client.CallResult(context.Background(), method, req, &res)
+	err := client.CallResult(context.Background(), method, req, &res)
+	if err != nil {
+		log.Err(err)
+	}
 
 	return res
 }

@@ -16,8 +16,9 @@ import (
 
 func Listen(port string) {
 	f := handler.Map{
-		"Push": handler.New(Push),
-		"Seed": handler.New(Seed),
+		"Push":     handler.New(Push),
+		"Seed":     handler.New(Seed),
+		"Register": handler.New(Register),
 	}
 
 	bridge := jhttp.NewBridge(f, &jhttp.BridgeOptions{

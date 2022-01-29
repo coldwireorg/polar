@@ -3,19 +3,18 @@ package main
 import (
 	"flag"
 	"os"
-	"polar/client"
 	"polar/database"
 	"polar/models"
 	"polar/server"
-	"polar/structures"
 	"polar/utils"
 
-	"github.com/mitchellh/mapstructure"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
 var (
+	bind *string
+	netw *string
 	port *string
 	seed *string
 	data *string
@@ -29,7 +28,9 @@ func init() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	// Declare CLI flags
+	bind = flag.String("bind", "127.0.0.1", "address to bind polar on")
 	port = flag.String("port", "1312", "port on which the node will listen")
+	netw = flag.String("network", "mainnet", "network polar connect to, mainnet for production, testnet for experiment, etc")
 	seed = flag.String("seed", "https://polar.coldnet.org:1312", "address to an instance of polar to download the network and discorver new nodes")
 	data = flag.String("data", "/opt/polar/", "path to the folder where the local database will be stored")
 	flag.Parse()
@@ -43,23 +44,8 @@ func init() {
 	database.DB.AutoMigrate(&models.Node{})
 	database.DB.AutoMigrate(&models.Object{})
 
-	if (models.Node{}.Number() == 0) {
-		models.Node{
-			Address:   "0.0.0.0",
-			PublicKey: utils.GetPbKey(*data),
-			Status:    1,
-			Storage:   400000,
-		}.Add()
-
-		var nodeList []models.Node
-		r := client.Call(*seed, "Seed", structures.Request{})
-		mapstructure.Decode(r, nodeList)
-
-		for _, node := range nodeList {
-			log.Print(node.Address)
-			node.Add()
-		}
-	}
+	address := *bind + ":" + *port
+	utils.InitNode(&address, *data, *seed, *netw)
 }
 
 func main() {
