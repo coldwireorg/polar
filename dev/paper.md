@@ -1,3 +1,4 @@
+// This is a draft! not the final version!
 # The Polar Protocol
 ## Decentralized object storage network for resilient services
 Draft of January 29 2022
