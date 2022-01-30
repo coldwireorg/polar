@@ -5,7 +5,7 @@ import (
 	"os"
 	"polar/database"
 	"polar/models"
-	"polar/server"
+	"polar/rpc"
 	"polar/utils"
 
 	"github.com/rs/zerolog"
@@ -58,5 +58,5 @@ func main() {
 		log.Info().Msg(node.Address + "/" + node.PublicKey)
 	}
 
-	server.Listen(*port)
+	rpc.Listen(*port)
 }

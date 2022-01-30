@@ -1,8 +1,10 @@
-package server
+package rpc
 
 import (
 	"net"
 	"net/http"
+	"polar/discovery"
+	"polar/object"
 
 	"github.com/creachadair/jrpc2"
 	"github.com/creachadair/jrpc2/handler"
@@ -16,9 +18,11 @@ import (
 
 func Listen(port string) {
 	f := handler.Map{
-		"Push":     handler.New(Push),
-		"Seed":     handler.New(Seed),
-		"Register": handler.New(Register),
+		"Push":     handler.New(object.Push),
+		"Pull":     handler.New(object.Pull),
+		"Erase":    handler.New(object.Erase),
+		"Seed":     handler.New(discovery.Seed),
+		"Register": handler.New(discovery.Register),
 	}
 
 	bridge := jhttp.NewBridge(f, &jhttp.BridgeOptions{

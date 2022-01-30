@@ -2,8 +2,8 @@ package utils
 
 import (
 	"math/rand"
-	"polar/client"
 	"polar/models"
+	"polar/rpc"
 	"polar/structures"
 
 	"github.com/mitchellh/mapstructure"
@@ -18,7 +18,7 @@ func randomSeed() models.Node {
 }
 
 func seedServers(seed string) {
-	r := client.Call(seed, "Seed", structures.Request{})
+	r := rpc.Call(seed, "Seed", structures.Request{})
 
 	n := []models.Node{}
 	err := mapstructure.Decode(r, &n)
@@ -34,7 +34,7 @@ func seedServers(seed string) {
 		if n.PublicKey == "" {
 			log.Info().Msg("New node discovered: " + node.Address + "/" + node.PublicKey)
 
-			client.Call("http://"+node.Address, "Register", structures.Request{
+			rpc.Call("http://"+node.Address, "Register", structures.Request{
 				Content: models.Node{}.List()[0],
 			})
 			node.Add()

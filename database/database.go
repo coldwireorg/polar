@@ -11,7 +11,7 @@ var DB *gorm.DB
 
 // Run database
 func Connect(path string) {
-	conn, err := gorm.Open(sqlite.Open(path+"/polar.db"), &gorm.Config{})
+	conn, err := gorm.Open(sqlite.Open(path+"/polar.db?mode=memory"), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
