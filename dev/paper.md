@@ -125,6 +125,7 @@ The services will just ask to the polar instance for a list of nodes to use and 
 
     (ask to upload a file on bloc)  (ask polar to pick nodes for a file of <size>)
 [user] -----------------------> [bloc] --------------------------------------> [polar]
+                                  |---> (store filename, etc for folders, etc)    |
                                                                                   |
                                                                                   |
          (send the list of nodes + random token through a websocket tunnel)       |
